@@ -5,6 +5,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import eu.ace_design.island.bot.IExplorerRaid;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -16,6 +18,7 @@ public class Explorer implements IExplorerRaid {
     public boolean leftOrRight = false;
     public String direction;
     public Integer batteryLevel;
+    public Response previousResponse;
 
     @Override
     public void initialize(String s) {
@@ -63,9 +66,17 @@ public class Explorer implements IExplorerRaid {
     @Override
     public void acknowledgeResults(String s) {
         JSONObject response = new JSONObject(new JSONTokener(new StringReader(s)));
-        //JSONObject extraInfo = response.getJSONObject("extras");
+        JSONObject extraInfo = response.getJSONObject("extras");
 
-        //Response res = new Response(response.getInt("cost"), response.getString("status"), extraInfo.);
+        JSONArray biomes;
+        try {
+             biomes = extraInfo.getJSONArray("biomes");
+        } catch (JSONException e) {
+             biomes = new JSONArray();
+        }
+
+        Response res = new Response(response.getInt("cost"), response.getString("status"), biomes.toList());
+        logger.info("** Acknowledgement results:\n {}",res.toString());
 
         logger.info("** Response received:\n"+response.toString(2));
         Integer cost = response.getInt("cost");
@@ -73,7 +84,6 @@ public class Explorer implements IExplorerRaid {
         batteryLevel -= cost;
         String status = response.getString("status");
         logger.info("The status of the drone is {}", status);
-        JSONObject extraInfo = response.getJSONObject("extras");
         logger.info("Additional information received: {}", extraInfo);
     }
 
