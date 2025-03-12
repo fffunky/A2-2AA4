@@ -1,4 +1,7 @@
 package ca.mcmaster.se2aa4.island.team28;
+
+import org.json.JSONObject;
+
 public class Decision {
 
     private JSONObject action = new JSONObject();
@@ -10,13 +13,13 @@ public class Decision {
 
     public Decision(String type, Direction d){
         action.put("action", type);
-        parameters.put("direction", d);
+        parameters.put("direction", d.toString());
         action.put("parameters", parameters);
     }
 
     public Decision(String type, Direction d, Integer range){
         action.put("action", type);
-        parameters.put("direction", d);
+        parameters.put("direction", d.toString());
         parameters.put("range", range);
         action.put("parameters", parameters);
     }
