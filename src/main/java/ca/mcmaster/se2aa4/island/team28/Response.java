@@ -1,5 +1,7 @@
 package ca.mcmaster.se2aa4.island.team28;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 public class Response {

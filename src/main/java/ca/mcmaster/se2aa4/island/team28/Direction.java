@@ -8,20 +8,11 @@ public enum Direction{
 
     @Override
     public String toString(){
-        switch(this){
-            case NORTH:
-                return "N";
-                break;
-            case EAST:
-                return "E";
-                break;
-            case SOUTH:
-                return "S";
-                break;
-            case WEST:
-                return "W";
-                break;
-            
-        }
+        return switch (this) {
+            case NORTH -> "N";
+            case EAST -> "E";
+            case SOUTH -> "S";
+            case WEST -> "W";
+        };
     }
 }

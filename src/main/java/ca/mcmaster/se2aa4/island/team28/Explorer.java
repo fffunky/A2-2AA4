@@ -34,7 +34,7 @@ public class Explorer implements IExplorerRaid {
 
     @Override
     public String takeDecision() {
-        JSONObject decision = new JSONObject();
+        Decision decision;
 
         if (previousResponse == null ||
                 previousResponse.getBiomes().isEmpty() ||
@@ -42,29 +42,24 @@ public class Explorer implements IExplorerRaid {
                 batteryLevel > 6800
         ) {
             if (scanOrFly) {
-                decision.put("action", "heading");
-                JSONObject parameters = new JSONObject();
                 if (leftOrRight) {
-                    parameters.put("direction", "E");
+                    decision = new Decision("heading", Direction.EAST);
                     leftOrRight = false;
                 } else {
-                    parameters.put("direction", "S");
+                    decision = new Decision("heading", Direction.SOUTH);
                     leftOrRight = true;
                 }
-                decision.put("parameters", parameters);
                 scanOrFly = false;
             } else{
-                decision.put("action", "scan");
+                decision = new Decision("scan");
                 scanOrFly = true;
             }
         } else {
-            decision.put("action", "stop");
+            decision = new Decision("stop");
         }
 
-
-
-        logger.info("** Decision: {}",decision.toString());
-        return decision.toString();
+        logger.info("** Decision: {}",decision.getDecision().toString());
+        return decision.getDecision().toString();
     }
 
     @Override
