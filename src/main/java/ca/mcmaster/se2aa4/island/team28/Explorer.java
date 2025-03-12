@@ -36,7 +36,11 @@ public class Explorer implements IExplorerRaid {
     public String takeDecision() {
         JSONObject decision = new JSONObject();
 
-        if (batteryLevel > 6900) {
+        if (previousResponse == null ||
+                previousResponse.getBiomes().isEmpty() ||
+                previousResponse.getBiomes().contains("OCEAN") ||
+                batteryLevel > 6800
+        ) {
             if (scanOrFly) {
                 decision.put("action", "heading");
                 JSONObject parameters = new JSONObject();
@@ -75,8 +79,8 @@ public class Explorer implements IExplorerRaid {
              biomes = new JSONArray();
         }
 
-        Response res = new Response(response.getInt("cost"), response.getString("status"), biomes.toList());
-        logger.info("** Acknowledgement results:\n {}",res.toString());
+        previousResponse = new Response(response.getInt("cost"), response.getString("status"), biomes.toList());
+        logger.info("** Acknowledgement results:\n {}",previousResponse.toString());
 
         logger.info("** Response received:\n"+response.toString(2));
         Integer cost = response.getInt("cost");
