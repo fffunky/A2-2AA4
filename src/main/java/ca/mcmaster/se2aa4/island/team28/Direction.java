@@ -6,7 +6,7 @@ public enum Direction{
     SOUTH,
     WEST;
 
-    public Direction fromString(String d) {
+    public static Direction fromString(String d) {
         return switch (d) {
             case "N" -> NORTH;
             case "E" -> EAST;

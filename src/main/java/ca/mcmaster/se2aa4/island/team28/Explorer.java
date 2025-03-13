@@ -1,6 +1,8 @@
 package ca.mcmaster.se2aa4.island.team28;
 
 import java.io.StringReader;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,6 +17,7 @@ public class Explorer implements IExplorerRaid {
     private final Logger logger = LogManager.getLogger();
 
     private ResponseBuilder rb = null;
+    private CommandCentre cc = null;
 
     public boolean leftOrRight = false;
     public String direction;
@@ -32,17 +35,20 @@ public class Explorer implements IExplorerRaid {
         logger.info("The drone is facing {}", direction);
         logger.info("Battery level is {}", batteryLevel);
 
+        cc = new CommandCentre(Direction.fromString(direction) , batteryLevel);
+
     }
 
     @Override
     public String takeDecision() {
-        Decision decision = null;
+        Decision decision;
 
         if (previousResponse == null) {
             decision = new Decision("scan");
         } else if (previousResponse instanceof ScanResponse) {
-            if (((ScanResponse) previousResponse).getBiomes().isEmpty() ||
-                    (((ScanResponse) previousResponse).getBiomes().contains("OCEAN"))) {
+            List<Object> biomes = ((ScanResponse) previousResponse).getBiomes();
+            if (biomes.isEmpty() ||
+                    (biomes.contains("OCEAN") && biomes.size() == 1)) {
                 if (leftOrRight) {
                     decision = new Decision("heading", Direction.EAST);
                     leftOrRight = false;
@@ -53,7 +59,7 @@ public class Explorer implements IExplorerRaid {
             } else {
                 decision = new Decision("stop");
             }
-        } else if (previousResponse.getType().equals("heading")) {
+        } else if (previousResponse instanceof HeadingResponse) {
                 decision = new Decision("scan");
         } else {
             decision = new Decision("stop");
@@ -68,7 +74,6 @@ public class Explorer implements IExplorerRaid {
     public void acknowledgeResults(String s) {
 
         rb = new ResponseBuilder(s, previousDecision);
-
         previousResponse = rb.getResponse();
 
         logger.info("** Acknowledgement results:\n {}",previousResponse.toString());
