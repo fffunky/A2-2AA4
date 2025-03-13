@@ -14,10 +14,12 @@ public class Explorer implements IExplorerRaid {
 
     private final Logger logger = LogManager.getLogger();
 
-    public boolean scanOrFly = false;
+    private ResponseBuilder rb = null;
+
     public boolean leftOrRight = false;
     public String direction;
     public Integer batteryLevel;
+    public Decision previousDecision = null;
     public Response previousResponse;
 
     @Override
@@ -34,14 +36,13 @@ public class Explorer implements IExplorerRaid {
 
     @Override
     public String takeDecision() {
-        Decision decision;
+        Decision decision = null;
 
-        if (previousResponse == null ||
-                previousResponse.getBiomes().isEmpty() ||
-                previousResponse.getBiomes().contains("OCEAN") ||
-                batteryLevel > 6800
-        ) {
-            if (scanOrFly) {
+        if (previousResponse == null) {
+            decision = new Decision("scan");
+        } else if (previousResponse instanceof ScanResponse) {
+            if (((ScanResponse) previousResponse).getBiomes().isEmpty() ||
+                    (((ScanResponse) previousResponse).getBiomes().contains("OCEAN"))) {
                 if (leftOrRight) {
                     decision = new Decision("heading", Direction.EAST);
                     leftOrRight = false;
@@ -49,41 +50,30 @@ public class Explorer implements IExplorerRaid {
                     decision = new Decision("heading", Direction.SOUTH);
                     leftOrRight = true;
                 }
-                scanOrFly = false;
-            } else{
-                decision = new Decision("scan");
-                scanOrFly = true;
+            } else {
+                decision = new Decision("stop");
             }
+        } else if (previousResponse.getType().equals("heading")) {
+                decision = new Decision("scan");
         } else {
             decision = new Decision("stop");
         }
 
+        previousDecision = decision;
         logger.info("** Decision: {}",decision.getDecision().toString());
         return decision.getDecision().toString();
     }
 
     @Override
     public void acknowledgeResults(String s) {
-        JSONObject response = new JSONObject(new JSONTokener(new StringReader(s)));
-        JSONObject extraInfo = response.getJSONObject("extras");
 
-        JSONArray biomes;
-        try {
-             biomes = extraInfo.getJSONArray("biomes");
-        } catch (JSONException e) {
-             biomes = new JSONArray();
-        }
+        rb = new ResponseBuilder(s, previousDecision);
 
-        previousResponse = new Response(response.getInt("cost"), response.getString("status"), biomes.toList());
+        previousResponse = rb.getResponse();
+
         logger.info("** Acknowledgement results:\n {}",previousResponse.toString());
 
-        logger.info("** Response received:\n"+response.toString(2));
-        Integer cost = response.getInt("cost");
-        logger.info("The cost of the action was {}", cost);
-        batteryLevel -= cost;
-        String status = response.getString("status");
-        logger.info("The status of the drone is {}", status);
-        logger.info("Additional information received: {}", extraInfo);
+        batteryLevel -= previousResponse.getCost();
     }
 
     @Override

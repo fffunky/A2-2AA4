@@ -1,18 +1,18 @@
 package ca.mcmaster.se2aa4.island.team28;
 
-import org.json.JSONObject;
+public abstract class Response {
+    private final Integer cost;
+    private final String status;
+    private final String type;
 
-import java.util.List;
-
-public class Response {
-    private Integer cost;
-    private String status;
-    private List<Object> biomes;
-
-    public Response(Integer cost, String status, List<Object> biomes) {
+    public Response(String type, Integer cost, String status) {
         this.cost = cost;
         this.status = status;
-        this.biomes = biomes;
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public Integer getCost() {
@@ -22,13 +22,5 @@ public class Response {
     public String getStatus() {
         return status;
     }
-
-    public List<Object> getBiomes() {
-        return biomes;
-    }
-
-    @Override
-    public String toString() {
-        return "Response [cost=" + cost + ", status=" + status + ", biome=" + biomes + "]";
-    }
 }
+
