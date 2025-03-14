@@ -18,7 +18,7 @@ public class ResponseBuilder {
     }
 
     private Response buildResponse(JSONObject responseJson, Action previousAction) {
-        String lastAction = previousAction.getDecision().getString("action");
+        String lastAction = previousAction.getAction().getString("action");
 
         Response res = null;
         JSONObject extraInfo;
@@ -36,7 +36,7 @@ public class ResponseBuilder {
                 extraInfo = responseJson.getJSONObject("extras");
                 res = new EchoResponse("echo", cost, status,
                         extraInfo.getInt("range"),
-                        extraInfo.getString("foudn"));
+                        extraInfo.getString("found"));
                 break;
             case "scan":
                 extraInfo = responseJson.getJSONObject("extras");
