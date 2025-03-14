@@ -24,7 +24,17 @@ public class Drone {
         return new Action("heading", this.direction);
     }
 
-    public Action
+    public Action echo() {
+        return new Action("echo", this.direction);
+    }
+
+    public Action scan() {
+        return new Action("scan");
+    }
+
+    public Action stop() {
+        return new Action("stop");
+    }
 
 
 }

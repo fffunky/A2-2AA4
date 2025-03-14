@@ -64,8 +64,8 @@ public class Explorer implements IExplorerRaid {
         }
 
         previousAction = action;
-        logger.info("** Decision: {}", action.getDecision().toString());
-        return action.getDecision().toString();
+        logger.info("** Decision: {}", action.getAction().toString());
+        return action.getAction().toString();
     }
 
     @Override
