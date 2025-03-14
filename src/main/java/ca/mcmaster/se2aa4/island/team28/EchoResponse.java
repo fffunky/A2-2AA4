@@ -16,4 +16,9 @@ public class EchoResponse extends Response {
     public String getFound() {
         return found;
     }
+
+    @Override
+    public String toString() {
+        return "EchoResponse [cost=" + this.getCost() + ", status=" + this.getStatus() + ", range=" + range + ", found=" + found + "]";
+    }
 }
