@@ -16,6 +16,24 @@ public enum Direction{
         };
     }
 
+    public Direction toRight() {
+        return switch (this) {
+            case NORTH -> EAST;
+            case EAST -> SOUTH;
+            case SOUTH -> WEST;
+            case WEST -> NORTH;
+        };
+    }
+
+    public Direction toLeft() {
+        return switch (this) {
+            case NORTH -> WEST;
+            case EAST -> NORTH;
+            case SOUTH -> EAST;
+            case WEST -> SOUTH;
+        };
+    }
+
     @Override
     public String toString(){
         return switch (this) {
