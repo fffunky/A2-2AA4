@@ -12,13 +12,13 @@ public class ResponseBuilder {
     private static final Logger log = LogManager.getLogger(ResponseBuilder.class);
     private Response response;
 
-    public ResponseBuilder(String responseString, Decision previousDecision) {
+    public ResponseBuilder(String responseString, Action previousAction) {
         JSONObject responseJson = new JSONObject(new JSONTokener(new StringReader(responseString)));
-        this.response = buildResponse(responseJson, previousDecision);
+        this.response = buildResponse(responseJson, previousAction);
     }
 
-    private Response buildResponse(JSONObject responseJson, Decision previousDecision) {
-        String lastAction = previousDecision.getDecision().getString("action");
+    private Response buildResponse(JSONObject responseJson, Action previousAction) {
+        String lastAction = previousAction.getDecision().getString("action");
 
         Response res = null;
         JSONObject extraInfo;

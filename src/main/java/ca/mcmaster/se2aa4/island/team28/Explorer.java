@@ -7,8 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import eu.ace_design.island.bot.IExplorerRaid;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -22,7 +20,7 @@ public class Explorer implements IExplorerRaid {
     public boolean leftOrRight = false;
     public String direction;
     public Integer batteryLevel;
-    public Decision previousDecision = null;
+    public Action previousAction = null;
     public Response previousResponse;
 
     @Override
@@ -41,42 +39,42 @@ public class Explorer implements IExplorerRaid {
 
     @Override
     public String takeDecision() {
-        Decision decision;
+        Action action;
 
         if (previousResponse == null) {
-            decision = new Decision("scan");
+            action = new Action("scan");
         } else if (previousResponse instanceof ScanResponse) {
             List<Object> biomes = ((ScanResponse) previousResponse).getBiomes();
             if (biomes.isEmpty() ||
                     (biomes.contains("OCEAN") && biomes.size() == 1)) {
                 if (leftOrRight) {
-                    decision = new Decision("heading", Direction.EAST);
+                    action = new Action("heading", Direction.EAST);
                     leftOrRight = false;
                 } else {
-                    decision = new Decision("heading", Direction.SOUTH);
+                    action = new Action("heading", Direction.SOUTH);
                     leftOrRight = true;
                 }
             } else {
-                decision = new Decision("stop");
+                action = new Action("stop");
             }
         } else if (previousResponse instanceof HeadingResponse) {
-                decision = new Decision("scan");
+                action = new Action("scan");
         } else {
-            decision = new Decision("stop");
+            action = new Action("stop");
         }
 
-        previousDecision = decision;
-        logger.info("** Decision: {}",decision.getDecision().toString());
-        return decision.getDecision().toString();
+        previousAction = action;
+        logger.info("** Decision: {}", action.getDecision().toString());
+        return action.getDecision().toString();
     }
 
     @Override
     public void acknowledgeResults(String s) {
 
-        rb = new ResponseBuilder(s, previousDecision);
+        rb = new ResponseBuilder(s, previousAction);
         previousResponse = rb.getResponse();
 
-        logger.info("** Acknowledgement results:\n {}",previousResponse.toString());
+        logger.info("** Acknowledgement results:\n{}\n",previousResponse.toString());
 
         batteryLevel -= previousResponse.getCost();
     }

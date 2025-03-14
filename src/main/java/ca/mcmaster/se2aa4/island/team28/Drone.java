@@ -10,5 +10,21 @@ public class Drone {
         this.battery = batteryLevel;
     }
 
+    public Action fly() {
+        return new Action("fly");
+    }
+
+    public Action turnLeft() {
+        this.direction = this.direction.toLeft();
+        return new Action("heading", this.direction);
+    }
+
+    public Action turnRight() {
+        this.direction = this.direction.toRight();
+        return new Action("heading", this.direction);
+    }
+
+    public Action
+
 
 }
