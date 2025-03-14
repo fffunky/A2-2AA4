@@ -43,7 +43,7 @@ public class Explorer implements IExplorerRaid {
 
         if (previousResponse == null) {
             action = new Action("scan");
-        } else if (previousResponse instanceof ScanResponse) {
+        } else if (previousResponse.getType() == "scan") {
             List<Object> biomes = ((ScanResponse) previousResponse).getBiomes();
             if (biomes.isEmpty() ||
                     (biomes.contains("OCEAN") && biomes.size() == 1)) {
