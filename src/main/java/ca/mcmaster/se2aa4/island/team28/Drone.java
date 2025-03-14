@@ -36,5 +36,8 @@ public class Drone {
         return new Action("stop");
     }
 
+    public void drainBattery(Integer cost){
+        this.battery -= cost;
+    }
 
 }
