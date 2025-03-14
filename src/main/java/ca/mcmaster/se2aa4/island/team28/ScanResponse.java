@@ -28,5 +28,10 @@ public class ScanResponse extends Response {
         return sites;
     }
 
+    @Override
+    public String toString() {
+        return "ScanResponse [cost=" + this.getCost() + ", status=" + this.getStatus() + ", biomes=" + biomes + ", creeks=" + creeks + ", sites=" + sites + "]";
+    }
+
 
 }

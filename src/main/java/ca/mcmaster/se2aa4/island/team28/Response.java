@@ -22,5 +22,10 @@ public abstract class Response {
     public String getStatus() {
         return status;
     }
+
+    @Override
+    public String toString() {
+        return "Response [cost=" + cost + ", status=" + status + "]";
+    }
 }
 
