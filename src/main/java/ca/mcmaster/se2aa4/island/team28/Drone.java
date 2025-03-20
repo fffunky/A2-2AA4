@@ -40,4 +40,8 @@ public class Drone {
         this.battery -= cost;
     }
 
+    public Direction getDirection() {
+        return direction;
+    }
+
 }

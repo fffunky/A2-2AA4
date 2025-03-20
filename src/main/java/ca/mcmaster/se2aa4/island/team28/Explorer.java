@@ -39,29 +39,7 @@ public class Explorer implements IExplorerRaid {
 
     @Override
     public String takeDecision() {
-        Action action;
-
-        if (previousResponse == null) {
-            action = new Action("scan");
-        } else if (previousResponse.getType() == "scan") {
-            List<Object> biomes = ((ScanResponse) previousResponse).getBiomes();
-            if (biomes.isEmpty() ||
-                    (biomes.contains("OCEAN") && biomes.size() == 1)) {
-                if (leftOrRight) {
-                    action = new Action("heading", Direction.EAST);
-                    leftOrRight = false;
-                } else {
-                    action = new Action("heading", Direction.SOUTH);
-                    leftOrRight = true;
-                }
-            } else {
-                action = new Action("stop");
-            }
-        } else if (previousResponse instanceof HeadingResponse) {
-                action = new Action("scan");
-        } else {
-            action = new Action("stop");
-        }
+        Action action = cc.getDecision(previousResponse);
 
         previousAction = action;
         logger.info("** Decision: {}", action.getAction().toString());
@@ -75,8 +53,6 @@ public class Explorer implements IExplorerRaid {
         previousResponse = rb.getResponse();
 
         logger.info("** Acknowledgement results:\n{}\n",previousResponse.toString());
-
-        batteryLevel -= previousResponse.getCost();
     }
 
     @Override
