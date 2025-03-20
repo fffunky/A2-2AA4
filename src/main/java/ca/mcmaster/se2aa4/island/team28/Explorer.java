@@ -57,6 +57,7 @@ public class Explorer implements IExplorerRaid {
 
     @Override
     public String deliverFinalReport() {
+        logger.info("**** pois: {}", cc.getPois().toString());
         return "no creek found";
     }
 

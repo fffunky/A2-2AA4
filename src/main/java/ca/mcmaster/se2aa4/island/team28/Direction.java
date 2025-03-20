@@ -34,6 +34,25 @@ public enum Direction{
         };
     }
 
+    public Boolean OppositeTo(Direction d) {
+        switch (this) {
+            case EAST:
+                if (d == WEST) return true;
+            case NORTH:
+                if (d == SOUTH) return true;
+            case WEST:
+                if (d == EAST) return true;
+            case SOUTH:
+                if (d == NORTH) return true;
+        }
+
+        return false;
+    }
+
+    public Boolean isEqual(Direction d) {
+        return this == d;
+    }
+
     @Override
     public String toString(){
         return switch (this) {
