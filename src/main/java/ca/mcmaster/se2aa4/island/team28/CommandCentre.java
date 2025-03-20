@@ -13,9 +13,10 @@ public class CommandCentre {
 
     private Integer distanceToLand;
     private List<Coordinate> travelLog = new ArrayList<>();
-    private Integer consecutiveTurns = 0;
     private List<Object> pois = new ArrayList<>();
     private List<List<Object>> biomeHistory = new ArrayList<>();
+    private Map<String, Boolean> echoCheck = new HashMap<>();
+    private Direction lastEcho = null;
 
     public CommandCentre(Direction direction, Integer BatteryLevel) {
         this.drone = new Drone(direction, BatteryLevel);
@@ -88,21 +89,59 @@ public class CommandCentre {
                 }
 
                 if (biomes.contains("OCEAN")) {
-
-                    if (consecutiveTurns == 2) {
-                        decision = drone.turnLeft();
-                        consecutiveTurns = 0;
-                    } else {
-                        decision = drone.turnRight();
-                        consecutiveTurns++;
-                    }
-
+                    updatePhase(Phase.RETURN_TO_LAND);
+                    echoCheck.put("left", false);
+                    echoCheck.put("right", false);
+                    echoCheck.put("forward", false);
+                    decision = getDecision(prevResponse);
                 } else {
                     decision = drone.fly();
                 }
 
             } else if (prevResType.equals("fly") || prevResType.equals("heading")) {
                     decision = drone.scan();
+            }
+        } else if (phase == Phase.RETURN_TO_LAND) {
+            if (prevResType.equals("scan")) {
+                if (!echoCheck.get("left")) {
+                    echoCheck.put("left", true);
+                    lastEcho = drone.getDirection().toLeft();
+                    return drone.echo(drone.getDirection().toLeft());
+                }
+
+                if (!echoCheck.get("right")) {
+                    echoCheck.put("right", true);
+                    lastEcho = drone.getDirection().toRight();
+                    return drone.echo(drone.getDirection().toRight());
+                }
+
+                // test if order of echo checks matters
+                if (!echoCheck.get("forward")) {
+                    echoCheck.put("forward", true);
+                    lastEcho = drone.getDirection();
+                    return drone.echo();
+                }
+
+            } else if (prevResType.equals("echo")) {
+                String found = ((EchoResponse) prevResponse).getFound();
+                if (!Objects.equals(found, "OUT_OF_RANGE")) {
+                    distanceToLand = ((EchoResponse) prevResponse).getRange();
+                    updatePhase(Phase.APPROACH_LAND);
+                    if (lastEcho != drone.getDirection()) {
+                        if (lastEcho == drone.getDirection().toLeft()) {
+                            decision = drone.turnLeft();
+                        } else if (lastEcho == drone.getDirection().toRight()) {
+                            decision = drone.turnRight();
+                        }
+                    }
+                } else {
+                    if (echoCheck.get("left") && echoCheck.get("right") && echoCheck.get("forward")) {
+                        return drone.stop();
+                    }
+                    decision = drone.turnRight();
+                }
+            } else if (prevResType.equals("heading")) {
+                decision = drone.scan();
             }
         }
 
