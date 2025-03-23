@@ -8,6 +8,14 @@ public class ScanLandHandler implements PhaseHandler {
         if (prevResType.equals("scan")) {
             ScanResponse sr = (ScanResponse) prevResponse;
 
+            if (!sr.getCreeks().isEmpty()) {
+                context.setCreekId(sr.getCreeks().getFirst().toString());
+            }
+
+            if (!sr.getSites().isEmpty()) {
+                context.setEmergencySiteId(sr.getSites().getFirst().toString());
+            }
+
             if (sr.getBiomes().contains("OCEAN")) {
                 context.updatePhase(Phase.RETURN_TO_LAND);
                 context.resetEchoCheck();

@@ -11,13 +11,6 @@ public class CommandCentre {
     private final DecisionContext context;
     private final Map<Phase, PhaseHandler> handlers = new EnumMap<>(Phase.class);
 
-    private Integer distanceToLand;
-    private List<Coordinate> travelLog = new ArrayList<>();
-    private List<Object> pois = new ArrayList<>();
-    private List<List<Object>> biomeHistory = new ArrayList<>();
-    private Map<String, Boolean> echoCheck = new HashMap<>();
-    private Direction lastEcho = null;
-
     public CommandCentre(Direction direction, Integer BatteryLevel) {
         this.context = new DecisionContext(new Drone(direction, BatteryLevel));
         handlers.put(Phase.FIND_LAND, new FindLandHandler());
@@ -27,6 +20,8 @@ public class CommandCentre {
     }
 
     public Action getDecision(Response prevResponse) {
+        context.updatePositionHistory();
+
         if (prevResponse == null) {
             // this will trigger on the very first call
             return context.getDrone().echo();
@@ -52,6 +47,9 @@ public class CommandCentre {
     }
 
     public List<Object> getPois() {
+        List<Object> pois = new ArrayList<>();
+        pois.add(context.getCreekId());
+        pois.add(context.getEmergencySiteId());
         return pois;
     }
 }
