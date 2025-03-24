@@ -10,14 +10,14 @@ public class ActionTest {
     @Test
     public void getActionTest() {
         Action a = new Action("scan");
-        System.out.println(a.getAction());
         assertTrue(a.getAction().toString().equals("{\"action\":\"scan\"}"));
     }
+
+    @Test
     public void getActionTest2() { //passing in more vars
         Direction d = Direction.NORTH;
         Action a = new Action("echo", d);
-        System.out.println(a.getAction());
-        assertTrue(a.getAction().toString().equals("{\"action\":\"echo\", \"parameters\": { \"direction\": \"N\" } }"));
+        assertTrue(a.getAction().toString().equals("{\"action\":\"echo\",\"parameters\":{\"direction\":\"N\"}}"));
     }
 
 
