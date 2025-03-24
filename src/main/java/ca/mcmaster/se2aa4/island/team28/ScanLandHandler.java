@@ -18,7 +18,6 @@ public class ScanLandHandler implements PhaseHandler {
 
             if ((sr.getBiomes().contains("OCEAN") && sr.getBiomes().size() == 1)) {
                 context.setLastFlyDirection(context.getDrone().getDirection());
-                context.resetEchoCheck();
                 return context.getDrone().echo();
             } else{
                 return context.getDrone().fly();

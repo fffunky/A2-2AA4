@@ -11,9 +11,6 @@ public class DecisionContext {
     private final Drone drone;
     private Phase phase = Phase.FIND_LAND;
     private Integer distanceToLand;
-    private Map<String,EchoResponse> echoCheck = new HashMap<>();
-    private String lastEcho = null;
-    private Map<String, Integer> turnCheck = new HashMap<>();
     private String creekId;
     private String emergencySiteId;
     private List<Coordinate> positionHistory = new ArrayList<>();
@@ -24,9 +21,6 @@ public class DecisionContext {
 
     public DecisionContext(Drone drone) {
         this.drone = drone;
-        echoCheck.put("left", null);
-        echoCheck.put("right", null);
-        echoCheck.put("forward", null);
     }
 
     public Drone getDrone() {
@@ -47,36 +41,6 @@ public class DecisionContext {
 
     public void setDistanceToLand(Integer distanceToLand) {
         this.distanceToLand = distanceToLand;
-    }
-
-    public String getLastEcho() {
-        return lastEcho;
-    }
-
-    public void setLastEcho(String lastEcho) {
-        this.lastEcho = lastEcho;
-    }
-
-    public Map<String,EchoResponse> getEchoCheck() {
-        return echoCheck;
-    }
-
-    public void updateEchoCheck(String key, EchoResponse value) {
-        echoCheck.put(key, value);
-    }
-
-    public Map<String,Integer> getTurnCheck() {
-        return turnCheck;
-    }
-
-    public void updateTurnCheck(String key, Integer value) {
-        turnCheck.put(key, value);
-    }
-
-    public void resetEchoCheck() {
-        echoCheck.put("left", null);
-        echoCheck.put("right", null);
-        echoCheck.put("forward", null);
     }
 
     public String getCreekId() {
