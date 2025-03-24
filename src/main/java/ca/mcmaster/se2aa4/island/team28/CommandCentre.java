@@ -53,8 +53,12 @@ public class CommandCentre {
 
     public List<Object> getPois() {
         List<Object> pois = new ArrayList<>();
-        pois.add("Creek: " + context.getCreekId());
-        pois.add("Emergency Site: " + context.getEmergencySiteId());
+        if (context.getCreekId() != null) {
+            pois.add("Creek: " + context.getCreekId());
+        }
+        if (context.getEmergencySiteId() != null) {
+            pois.add("Emergency Site: " + context.getEmergencySiteId());
+        }
         return pois;
     }
 }
