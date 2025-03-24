@@ -17,7 +17,6 @@ public class Explorer implements IExplorerRaid {
     private ResponseBuilder rb = null;
     private CommandCentre cc = null;
 
-    public boolean leftOrRight = false;
     public String direction;
     public Integer batteryLevel;
     public Action previousAction = null;
