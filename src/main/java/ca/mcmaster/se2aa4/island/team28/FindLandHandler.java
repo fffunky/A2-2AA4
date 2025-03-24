@@ -8,15 +8,17 @@ public class FindLandHandler implements PhaseHandler{
         if (prevResType.equals("echo")) {
             EchoResponse er = (EchoResponse) prevResponse;
             if (er.getFound().equals("OUT_OF_RANGE")) {
-                Direction curDirection = context.getDrone().getDirection();
-                return (curDirection == Direction.SOUTH) ? context.getDrone().turnLeft() : context.getDrone().turnRight();
+                return context.getDrone().fly();
             } else {
-                context.setDistanceToLand(er.getRange());
-                context.updatePhase(Phase.APPROACH_LAND);
-                return null;
+                context.setDistanceToLand(er.getRange() - 1);
+                return context.getDrone().turnRight();
             }
+        } else if (prevResType.equals("fly")) {
+            return context.getDrone().echo(context.getDrone().getDirection().toRight());
         } else {
-            return context.getDrone().echo();
+            context.setLastFlyDirection(Direction.SOUTH);
+            context.updatePhase(Phase.APPROACH_LAND);
+            return null;
         }
     }
 }

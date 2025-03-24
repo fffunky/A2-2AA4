@@ -17,6 +17,10 @@ public class DecisionContext {
     private String creekId;
     private String emergencySiteId;
     private List<Coordinate> positionHistory = new ArrayList<>();
+    private Integer uTurnCount = 0;
+    private Direction lastFlyDirection;
+    private Boolean searchingEast = true;
+    private Integer reorientCount = 0;
 
     public DecisionContext(Drone drone) {
         this.drone = drone;
@@ -97,5 +101,37 @@ public class DecisionContext {
 
     public Boolean hasCoordinateBeenVisited(Coordinate c) {
         return positionHistory.contains(c);
+    }
+
+    public Integer getUTurnCount() {
+        return uTurnCount;
+    }
+
+    public void setUTurnCount(Integer uTurnCount) {
+        this.uTurnCount = uTurnCount;
+    }
+
+    public Direction getLastFlyDirection() {
+        return lastFlyDirection;
+    }
+
+    public void setLastFlyDirection(Direction lastFlyDirection) {
+        this.lastFlyDirection = lastFlyDirection;
+    }
+
+    public Boolean searchingEast() {
+        return this.searchingEast;
+    }
+
+    public void startSearchingWest() {
+        this.searchingEast = false;
+    }
+
+    public Integer getReorientCount() {
+        return reorientCount;
+    }
+
+    public void setReorientCount(Integer reorientCount) {
+        this.reorientCount = reorientCount;
     }
 }

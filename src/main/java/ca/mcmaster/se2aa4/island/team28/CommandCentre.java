@@ -17,6 +17,8 @@ public class CommandCentre {
         handlers.put(Phase.APPROACH_LAND, new ApproachLandHandler());
         handlers.put(Phase.SCAN_LAND, new ScanLandHandler());
         handlers.put(Phase.RETURN_TO_LAND, new ReturnToLandHandler());
+        handlers.put(Phase.UTURN, new UTurnHandler());
+        handlers.put(Phase.REORIENT, new ReorientHandler());
     }
 
     public Action getDecision(Response prevResponse) {
@@ -31,6 +33,10 @@ public class CommandCentre {
 
         if (context.getDrone().getBattery() <= 25) {
             log.info("*** low battery ({}), ending search.", context.getDrone().getBattery());
+            return context.getDrone().stop();
+        }
+
+        if (context.getCreekId() != null && context.getEmergencySiteId() != null) {
             return context.getDrone().stop();
         }
 

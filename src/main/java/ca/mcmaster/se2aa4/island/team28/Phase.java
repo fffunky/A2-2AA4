@@ -4,6 +4,8 @@ public enum Phase {
     FIND_LAND,
     APPROACH_LAND,
     RETURN_TO_LAND,
+    UTURN,
+    REORIENT,
     SCAN_LAND;
 
     @Override
@@ -13,6 +15,8 @@ public enum Phase {
             case APPROACH_LAND -> "Approach Land";
             case RETURN_TO_LAND -> "Return to Land";
             case SCAN_LAND -> "Scan Land";
+            case UTURN -> "U-Turn";
+            case REORIENT -> "Reorient";
         };
     }
 }
