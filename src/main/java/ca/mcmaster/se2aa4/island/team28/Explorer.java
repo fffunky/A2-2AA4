@@ -57,8 +57,18 @@ public class Explorer implements IExplorerRaid {
 
     @Override
     public String deliverFinalReport() {
-        logger.info("**** pois: {}", cc.getPois().toString());
-        return "no creek found";
+        StringBuilder sb = new StringBuilder();
+
+        if (!cc.getPois().isEmpty()) {
+            for (Object s : cc.getPois()) {
+                sb.append(s).append("\n");
+            }
+        } else {
+            sb.append("No Creeks or Emergency sites found.\n");
+        }
+
+        logger.info(sb.toString());
+        return sb.toString();
     }
 
 }

@@ -16,7 +16,6 @@ public class CommandCentre {
         handlers.put(Phase.FIND_LAND, new FindLandHandler());
         handlers.put(Phase.APPROACH_LAND, new ApproachLandHandler());
         handlers.put(Phase.SCAN_LAND, new ScanLandHandler());
-        handlers.put(Phase.RETURN_TO_LAND, new ReturnToLandHandler());
         handlers.put(Phase.UTURN, new UTurnHandler());
         handlers.put(Phase.REORIENT, new ReorientHandler());
     }
@@ -54,8 +53,8 @@ public class CommandCentre {
 
     public List<Object> getPois() {
         List<Object> pois = new ArrayList<>();
-        pois.add(context.getCreekId());
-        pois.add(context.getEmergencySiteId());
+        pois.add("Creek: " + context.getCreekId());
+        pois.add("Emergency Site: " + context.getEmergencySiteId());
         return pois;
     }
 }
